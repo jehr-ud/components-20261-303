@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RiddleAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    GameScreen()
+                    GameScreen(innerPadding)
                 }
             }
         }
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GameScreen(){
+fun GameScreen(padding: PaddingValues){
     val context = LocalContext.current
     var name by remember { mutableStateOf("") }
 
@@ -58,7 +59,7 @@ fun GameScreen(){
 
         GameStateEnum.CREATING_PLAYERS -> {
 
-            Column(modifier = Modifier.fillMaxSize().padding(20.dp),
+            Column(modifier = Modifier.fillMaxSize().padding(padding),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("Input a name a player")
@@ -97,7 +98,7 @@ fun GameScreen(){
         GameStateEnum.SHOWING_CLUE -> {
             var currentPlayer = players[positionClue]
 
-            Column(modifier = Modifier.fillMaxSize().padding(20.dp),
+            Column(modifier = Modifier.fillMaxSize().padding(padding),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("Take phone ${currentPlayer.name}")

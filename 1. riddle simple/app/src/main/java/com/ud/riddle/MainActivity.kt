@@ -52,8 +52,9 @@ fun GameScreen(padding: PaddingValues){
     val players = remember { mutableStateListOf<Player>() }
 
     val secret = "cactus"
-    var impostorPosition: Int?
-    var positionClue = 0
+    var impostorPosition: Int? = 0
+    var positionClue by remember { mutableStateOf(0) }
+    var currentPlayer: Player?
 
     when(gameState){
 
@@ -96,17 +97,17 @@ fun GameScreen(padding: PaddingValues){
 
         }
         GameStateEnum.SHOWING_CLUE -> {
-            var currentPlayer = players[positionClue]
+            currentPlayer = players[positionClue]
 
             Column(modifier = Modifier.fillMaxSize().padding(padding),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Take phone ${currentPlayer.name}")
+                Text("Take phone ${currentPlayer?.name}")
 
                 Button(onClick = {
-                    val isImpostor =  currentPlayer.isImpostor
+                    val isImpostor =  currentPlayer?.isImpostor
 
-                    if (isImpostor){
+                    if (isImpostor == true){
                         Toast.makeText(context, "No tienes pista", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(context, "Pista: $secret", Toast.LENGTH_LONG).show()
@@ -119,6 +120,7 @@ fun GameScreen(padding: PaddingValues){
                     positionClue++
 
                     if (positionClue == players.size){
+                        positionClue = 0
                         gameState = GameStateEnum.IN_TURNS
                     }
 
@@ -128,10 +130,27 @@ fun GameScreen(padding: PaddingValues){
 
         }
         GameStateEnum.IN_TURNS -> {
+            currentPlayer = players[positionClue]
+
+            Text("Take phone ${currentPlayer.name}")
+
+            Button(onClick = {
+                currentPlayer = players[positionClue]
+                positionClue++
+
+                if (positionClue == players.size){
+                    gameState = GameStateEnum.END
+                }
+
+            }) { Text("Next") }
 
         }
         GameStateEnum.END -> {
+            Button(onClick = {
+                val nameImpostor = impostorPosition?.let { players[it] }?.name
+                Toast.makeText(context, "Impostor $nameImpostor", Toast.LENGTH_LONG).show()
 
+            }) { Text("Show impostor") }
         }
 
     }

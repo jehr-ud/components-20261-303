@@ -8,9 +8,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -60,41 +65,71 @@ fun GameScreen(padding: PaddingValues){
 
         GameStateEnum.CREATING_PLAYERS -> {
 
-            Column(modifier = Modifier.fillMaxSize().padding(padding),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Input a name a player")
-                TextField(
-                    label = { Text("Label") },
-                    value = name,
-                    onValueChange = {
-                        name = it
-                    }
-                )
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                Button(onClick = {
-                     players.add(Player(name=name))
-                     name = ""
-                }) { Text("Add") }
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                ) {
 
-                Button(onClick = {
-                    players.shuffle()
-                    impostorPosition = players.indices.random()
-                    players[impostorPosition].isImpostor = true
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
 
-                    gameState = GameStateEnum.SHOWING_CLUE
-                }) { Text("Start") }
+                        Text("Input a name a player")
 
-                if (players.isNotEmpty()){
-                    Text("Players:")
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                    for (player in players){
-                        Text(player.name)
+                        TextField(
+                            label = { Text("Player name") },
+                            value = name,
+                            onValueChange = { name = it }
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Button(onClick = {
+                            if (name.isNotBlank()) {
+                                players.add(Player(name = name))
+                                name = ""
+                            }
+                        }) {
+                            Text("Add")
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Button(onClick = {
+                            if (players.isNotEmpty()) {
+                                players.shuffle()
+                                impostorPosition = players.indices.random()
+                                players[impostorPosition].isImpostor = true
+                                gameState = GameStateEnum.SHOWING_CLUE
+                            }
+                        }) {
+                            Text("Start")
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        if (players.isNotEmpty()) {
+                            Text("Players:")
+
+                            players.forEach { player ->
+                                Text(player.name)
+                            }
+                        }
                     }
                 }
-
             }
-
         }
         GameStateEnum.SHOWING_CLUE -> {
             currentPlayer = players[positionClue]

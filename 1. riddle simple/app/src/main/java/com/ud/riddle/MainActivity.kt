@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ud.riddle.models.enums.GameStateEnum
 import com.ud.riddle.models.enums.Player
@@ -188,5 +189,13 @@ fun GameScreen(padding: PaddingValues){
             }) { Text("Show impostor") }
         }
 
+    }
+}
+
+@Preview
+@Composable
+fun GameScreenPreview(){
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        GameScreen(innerPadding)
     }
 }

@@ -316,7 +316,7 @@ fun GameScreen(padding: PaddingValues) {
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // NUEVO: selector de categorías
+                //selector de categorías
                 Text("Seleccione una categoria (opcional si van a jugar los mismos):")
                 Text("Categoría:")
                 Spacer(modifier = Modifier.height(8.dp))

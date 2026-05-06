@@ -33,6 +33,11 @@ class GameViewModel(
 
     private var currentCode: String? = null
 
+
+    fun getDiscovery(){
+
+    }
+
     fun startNewGame(category: String = "animales", language: String = "es") {
         val userId = userPrefs.getUser()?.uid
 

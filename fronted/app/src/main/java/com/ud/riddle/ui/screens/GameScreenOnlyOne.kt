@@ -3,6 +3,7 @@ package com.ud.riddle.ui.screens
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -28,7 +31,10 @@ import androidx.compose.ui.unit.dp
 import com.ud.riddle.service.GeminiService
 import com.ud.riddle.models.Game
 import com.ud.riddle.models.Player
+import com.ud.riddle.models.enums.GameCategory
+import com.ud.riddle.models.enums.GameLanguages
 import com.ud.riddle.models.enums.GameStateEnum
+import com.ud.riddle.models.enums.GameVisibility
 import com.ud.riddle.viewmodels.GameViewModel
 import kotlinx.coroutines.launch
 
@@ -44,16 +50,11 @@ fun GameScreenOnlyOne(viewModel: GameViewModel) {
     val players = remember { mutableStateListOf<Player>() }
 
     var secret by remember { mutableStateOf("cactus") }
-    var impostorPosition: Int? = 0
+    val impostorPosition: Int = 0
     var positionClue by remember { mutableStateOf(0) }
     var currentPlayer: Player?
 
     when (gameState) {
-        GameStateEnum.WAITING -> {
-        }
-        GameStateEnum.GAME_CONFIG -> {
-        }
-        // ── 1. Agregar jugadores ──────────────────────────────────────────
         GameStateEnum.CREATING_PLAYERS -> {
             Column(
                 modifier = Modifier
@@ -102,13 +103,59 @@ fun GameScreenOnlyOne(viewModel: GameViewModel) {
 
                         Button(
                             enabled = players.isNotEmpty(),
-                            onClick = { gameState = GameStateEnum.SHOWING_CLUE }
+                            onClick = { gameState = GameStateEnum.GAME_CONFIG }
                         ) {
                             Text("EMPEZAR →")
                         }
                     }
                 }
             }
+        }
+
+        GameStateEnum.GAME_CONFIG -> {
+            var selectedCategory by remember { mutableStateOf(GameCategory.MOVIES) }
+            var selectedLanguage by remember { mutableStateOf(GameLanguages.SPANISH) }
+
+            SectionLabel("Categoría")
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                GameCategory.entries.forEach { category ->
+                    CategoryCard(
+                        category = category,
+                        isSelected = selectedCategory == category,
+                        modifier = Modifier.weight(1f),
+                        onClick = { selectedCategory = category }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // --- Idioma ---
+            SectionLabel("Idioma")
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                GameLanguages.entries.forEach { language ->
+                    LanguageChip(
+                        language = language,
+                        isSelected = selectedLanguage == language,
+                        modifier = Modifier.weight(1f),
+                        onClick = { selectedLanguage = language }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
         GameStateEnum.SHOWING_CLUE -> {

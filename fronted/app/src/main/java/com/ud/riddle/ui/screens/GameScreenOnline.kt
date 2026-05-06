@@ -56,65 +56,9 @@ fun GameScreenOnline(viewModel: GameViewModel) {
     var gameConfig by remember { mutableStateOf<Game?>(null) }
 
     when (gameState) {
-        GameStateEnum.WAITING -> {
-            MatchScreen(viewModel)
-        }
         // ── 1. Agregar jugadores ──────────────────────────────────────────
         GameStateEnum.CREATING_PLAYERS -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxWidth(0.85f),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Ingresa el nombre del jugador")
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        TextField(
-                            label = { Text("Nombre") },
-                            value = name,
-                            onValueChange = { name = it }
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Button(onClick = {
-                            if (name.isNotBlank()) {
-                                players.add(Player(name = name))
-                                name = ""
-                            }
-                        }) {
-                            Text("Agregar")
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        if (players.isNotEmpty()) {
-                            Text("Jugadores:")
-                            players.forEach { player -> Text(player.name) }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        // Al pulsar Siguiente va a GameConfigScreen
-                        Button(
-                            enabled = players.isNotEmpty(),
-                            onClick = { gameState = GameStateEnum.GAME_CONFIG }
-                        ) {
-                            Text("Siguiente →")
-                        }
-                    }
-                }
-            }
+            MatchScreen(viewModel)
         }
 
         // ── 2. Configurar partida ─────────────────────────────────────────

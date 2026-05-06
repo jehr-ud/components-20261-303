@@ -17,11 +17,11 @@ fun ModeSelectionScreen(onModeSelected: (Boolean) -> Unit) {
         modifier = Modifier.fillMaxSize()
     ) {
         Button(onClick = { onModeSelected(false) }) {
-            Text("Juego local")
+            Text("Juego local (todos juegan en un solo dispositivo)")
         }
 
         Button(onClick = { onModeSelected(true) }) {
-            Text("Juego online")
+            Text("Juego online (cada uno con su di)")
         }
     }
 }

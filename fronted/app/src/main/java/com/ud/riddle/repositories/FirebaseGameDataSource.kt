@@ -17,7 +17,7 @@ class FirebaseGameDataSource : GameDataSource {
         val game = Game(
             code = code,
             player1 = playerId,
-            status = GameStateEnum.WAITING,
+            status = GameStateEnum.CREATING_PLAYERS,
             turnPlayerId = playerId,
             word = word,
             clue = clue

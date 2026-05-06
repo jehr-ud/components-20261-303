@@ -11,7 +11,7 @@ class LocalGameDataSource : GameDataSource {
         val game = Game(
             code = "LOCAL",
             player1 = playerId,
-            status = GameStateEnum.WAITING,
+            status = GameStateEnum.CREATING_PLAYERS,
             turnPlayerId = playerId,
             word = word,
             clue = clue
